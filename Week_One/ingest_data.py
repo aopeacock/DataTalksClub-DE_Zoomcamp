@@ -25,17 +25,21 @@ def main(params):
                           iterator=True, chunksize=100000)
 
     while True:
-        t_start = time()
+        try:
+            t_start = time()
 
-        df = next(df_iter)
-        df.lpep_pickup_datetime = pd.to_datetime(df.lpep_pickup_datetime)
-        df.lpep_dropoff_datetime = pd.to_datetime(df.lpep_dropoff_datetime)
+            df = next(df_iter)
+            df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
+            df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
 
-        df.to_sql(name=table_name, con=engine, if_exists='append')
+            df.to_sql(name=table_name, con=engine, if_exists='append')
 
-        t_end = time()
-        print('inserted another chunk of records, took %.3f second' %
-              (t_end - t_start))
+            t_end = time()
+            print('inserted another chunk of records, took %.3f second' %
+                  (t_end - t_start))
+        except StopIteration:
+            print(f'Finished load records to {table_name}')
+            break
 
 
 if __name__ == '__main__':
