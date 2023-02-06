@@ -1,0 +1,5 @@
+*.csv
+/ny_taxi_postgres_data/*
+/data/*
+*.gz
+/terraform/*
