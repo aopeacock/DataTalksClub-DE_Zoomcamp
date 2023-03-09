@@ -3,3 +3,4 @@
 *.parquet
 /code/data/*
 /code/fhvhv/*
+/code/tmp/*

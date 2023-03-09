@@ -1,9 +1,40 @@
-StructType([
-    StructField('hvfhs_license_num', StringType(), True), 
-    StructField('dispatching_base_num', StringType(), True), 
-    StructField('pickup_datetime', TimestampType(), True), 
-    StructField('dropoff_datetime', TimestampType(), True), 
-    StructField('PULocationID', IntegerType(), True), 
-    StructField('DOLocationID', IntegerType(), True), 
-    StructField('SR_Flag', DoubleType(), True)
-])
+python 06_spark_sql.py \
+    --input_green=data/pq/green/2020/* \
+    --input_yellow=data/pq/yellow/2020/* \
+    --output=data/report-2020
+
+URL="spark://de-zoomcamp.us-central1-c.c.dtc-de-375517.internal:7077"
+
+spark-submit \
+    --master="${URL}" \
+    06_spark_sql.py \
+        --input_green=data/pq/green/2020/* \
+        --input_yellow=data/pq/yellow/2020/* \
+        --output=data/report-2020 
+
+--input_green=gs://dtc_data_lake_dtc-de-375517/pq/green/2021/*/ \
+--input_yellow=gs://dtc_data_lake_dtc-de-375517/pq/yellow/2021/*/ \
+--output=gs://dtc_data_lake_dtc-de-375517/report-2021 
+
+gs://dtc_data_lake_dtc-de-375517/code/06_spark_sql.py
+
+gcloud dataproc jobs submit pyspark \
+    --cluster=de-zoomcamp-cluster \
+    --region=us-central1 \
+    gs://dtc_data_lake_dtc-de-375517/code/06_spark_sql.py \
+    -- \
+        --input_green=gs://dtc_data_lake_dtc-de-375517/pq/green/2021/*/ \
+        --input_yellow=gs://dtc_data_lake_dtc-de-375517/pq/yellow/2021/*/ \
+        --output=gs://dtc_data_lake_dtc-de-375517/report-2021 
+
+
+gcloud dataproc jobs submit pyspark \
+    --cluster=de-zoomcamp-cluster \
+    --region=us-central1 \
+    gs://dtc_data_lake_dtc-de-375517/code/06_spark_sql_big_query.py \
+    -- \
+        --input_green=gs://dtc_data_lake_dtc-de-375517/pq/green/2021/*/ \
+        --input_yellow=gs://dtc_data_lake_dtc-de-375517/pq/yellow/2021/*/ \
+        --output=trips_data_all.reports-2020
+
+trips_data_all.reports-2020
